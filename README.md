@@ -1,66 +1,24 @@
-Here is the professional description of the Key Features and Segmentation Pipeline for your README.md file in English:
+Key Features
 
-🚀 Key Features
-Multi-Spectral Data Integration: Leverages the synergy between RGB and NRG (Near-Infrared, Red, Green) imagery to enhance detection accuracy.
+Multispectral Fusion: Combines RGB and NRG (Infrared) data for superior detection accuracy.
 
-Automated NDVI Analysis: Automatically calculates the NDVI (Normalized Difference Vegetation Index) to distinguish dead biomass from healthy living vegetation.
+NDVI Analysis: Automatically differentiates dead biomass from healthy vegetation.
 
-Advanced Image Refinement: Utilizes morphological operations, including binary hole filling and dilation (using a disk element of radius 5), to create continuous and robust segmentation masks.
+Dual Thresholding: Processes images via HSV color space and vegetation indices simultaneously.
 
-Dual-Thresholding Strategy: Implements a two-pronged approach for segmentation:
+Evaluation Suite: Calculates IoU, Confusion Matrix, and F1-Score metrics automatically.
 
-HSV Color Space Thresholding: Specifically targets the pinkish/greyish hues characteristic of dead wood.
+Segmentation Pipeline
 
-Vegetation Index Thresholding: Filters pixels based on biological spectral signatures.
+Preprocessing: Standardizes images to 256x256 using nearest-neighbor interpolation.
 
-Comprehensive Evaluation Suite: Includes a complete analytical module to calculate:
+Spectral Indexing: Computes NDVI to isolate biological signatures of dead wood.
 
-IoU (Intersection over Union): To measure the overlap accuracy between predicted and ground truth masks.
+Color Masking: Filters specific grey and pink hues in the HSV color space.
 
-Confusion Matrix: Visualized via heatmaps to assess Accuracy, Precision, Recall, and F1-Score.
+Post-Processing: Merges masks via logical AND followed by hole filling and dilation.
 
-Flexible CLI & Configuration: Manage paths, sizes, and thresholds through a config.yaml file or via command-line arguments (CLI) for rapid testing.
-
-🛠 Segmentation Pipeline
-The data processing workflow follows a structured sequence to ensure high-quality results:
-
-1. Data Loading & Standardization
-
-The system loads RGB images, NRG images, and ground truth masks.
-
-Images are resized to the target dimensions (e.g., 256x256) using order 0 interpolation (nearest-neighbor) to maintain the integrity of binary masks and categorical data.
-
-2. Spectral Analysis (NDVI Calculation)
-
-The algorithm extracts the Near-Infrared (NIR) and Red channels from the NRG images to compute the NDVI:
-
-NDVI= 
-NIR+Red+10 
-−10
- 
-NIR−Red
-​	
- 
-Pixels falling within the range of 0.2 to 0.4 are classified as potential dead wood areas.
-
-3. HSV Color Segmentation
-
-Simultaneously, the RGB image is converted to the HSV (Hue, Saturation, Value) color space. The pipeline filters pixels based on the Hue component to isolate the specific "dead wood" color palette defined in the configuration.
-
-4. Mask Combination & Morphological Post-Processing
-
-Logical Conjunction: The masks from both the NDVI and HSV stages are combined using a logical AND operation to minimize False Positives.
-
-Hole Filling: Small gaps within detected objects are removed using binary_fill_holes.
-
-Dilation: A dilation operation is applied to smooth edges and connect closely situated detected fragments into a single object.
-
-5. Validation & Visualization
-
-The final mask is compared against the ground truth mask to compute statistical metrics.
-
-The pipeline generates bar charts for IoU, heatmaps for the confusion matrix, and a 6-panel visual comparison showing every stage of the process.
-
+Validation: Compares the final mask against ground truth to generate performance charts.
 ```bash
 git clone https://github.com/YourUsername/dead-tree-segmentation.git
 cd dead-tree-segmentation
