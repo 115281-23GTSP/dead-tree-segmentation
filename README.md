@@ -3,21 +3,37 @@ This project provides an automated pipeline for detecting and segmenting dead tr
 The pipeline performs preprocessing, vegetation analysis, and segmentation based on configurable thresholds.
 🚀 Installation & Usage
 1. Clone the repository
+
+```bash
 git clone https://github.com/YourUsername/dead-tree-segmentation.git
 cd dead-tree-segmentation
-2. Install dependencies
+```
+
+3. Install dependencies
 It is strongly recommended to use a virtual environment.
+
+```bash
 pip install -r requirements.txt
-3. Prepare the data
+```
+
+5. Prepare the data
+
 Place your input data in the following structure (default):
+```bash
 test data/
 ├── RGB_images/
 ├── NRG_images/
 └── masks/
+```
 File paths can be modified in config.yaml.
-4. Run the pipeline
+
+6. Run the pipeline
+
+```bash
 python main.py
-5. Optional: Override segmentation thresholds
+```
+
+8. Optional: Override segmentation thresholds
 You can manually adjust Hue thresholds via command-line arguments:
 python main.py --h_min 0.72 --h_max 0.92
 ⚙️ Configuration
