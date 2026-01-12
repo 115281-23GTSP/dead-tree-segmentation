@@ -105,7 +105,7 @@ def nrg_masks(nrg_list, cfg):
 
         ndvi = (nir - red) / (nir + red + 1e-10)
 
-        nir_mask = (ndvi > 0.25) & (ndvi < 0.6)
+        nir_mask = (ndvi > 0.09) & (ndvi < 0.4)
 
         nir_filling = binary_fill_holes(nir_mask)
 
