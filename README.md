@@ -8,6 +8,8 @@ Dual Thresholding: Processes images via HSV color space and vegetation indices s
 
 Evaluation Suite: Calculates IoU, Confusion Matrix, and F1-Score metrics automatically.
 
+
+
 Segmentation Pipeline
 
 Preprocessing: Standardizes images to 256x256 using nearest-neighbor interpolation.
