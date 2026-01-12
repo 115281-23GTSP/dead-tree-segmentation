@@ -1,15 +1,8 @@
-from PIL import Image
-import skimage as ski
-from skimage import color, filters, transform
-from skimage.color import rgb2hsv
-import matplotlib.pyplot as plt
-import seaborn as sns
-from seaborn import heatmap
-import numpy as np
-from sklearn.metrics import confusion_matrix
-from skimage.exposure import rescale_intensity
-import os
-from scipy.ndimage import binary_fill_holes
-from skimage.morphology import binary_dilation, disk
-import yaml
-import argparse
+numpy
+matplotlib
+seaborn
+scikit-image
+Pillow
+PyYAML
+scikit-learn
+scipy
