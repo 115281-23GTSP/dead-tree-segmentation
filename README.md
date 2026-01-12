@@ -102,4 +102,7 @@ Threshold values may require tuning depending on lighting conditions and vegetat
 Visual Explanation:
 <img width="1434" height="405" alt="Zrzut ekranu 2026-01-12 o 22 34 59" src="https://github.com/user-attachments/assets/02ab007e-2de2-44fa-a339-fb4c4f0ab881" />
 
+<img width="785" height="472" alt="image" src="https://github.com/user-attachments/assets/a00df9c7-9c43-4656-874d-f11e5fb3a546" />
+
+
 
