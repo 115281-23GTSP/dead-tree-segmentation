@@ -16,6 +16,9 @@ Preprocessing: Standardizes images to 256x256 using nearest-neighbor interpolati
 
 Spectral Indexing: Computes NDVI to isolate biological signatures of dead wood.
 
+https://eos.com/blog/ndvi-faq-all-you-need-to-know-about-ndvi/<img width="580" height="305" alt="image" src="https://github.com/user-attachments/assets/e8faac8d-e667-43df-9fe1-1ea21e84c93a" />
+
+
 Color Masking: Filters specific grey and pink hues in the HSV color space.
 
 Post-Processing: Merges masks via logical AND followed by hole filling and dilation.
