@@ -13,6 +13,7 @@ from scipy.ndimage import binary_fill_holes
 from skimage.morphology import binary_dilation, disk
 import yaml
 from config import NGR_DIR, RGB_IMAGES, MASKS, LOWER_PINK, UPPER_PINK, TARGET_SIZE, LOWER_BLUE, UPPER_BLUE
+import argparse
 
 def config(path="config.yaml"):
 
@@ -31,6 +32,41 @@ def config(path="config.yaml"):
         TARGET_SIZE = tuple(cfg['general']['TARGET_SIZE'])
 
     return cfg
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Dead Tree Segmentation Pipeline")
+    
+    parser.add_argument("-c", "--config", type=str, default="config.yaml", help="Path to config.yaml")
+
+    parser.add_argument("-h_min", "--hue-min", type=float, help="Override Lower Hue threshold")
+    parser.add_argument("-h_max", "--hue-max", type=float, help="Override Upper Hue threshold")
+    
+    return parser.parse_args()
+
+def load_and_set_config(args):
+
+    global NGR_DIR, RGB_IMAGES, MASKS, LOWER_PINK, UPPER_PINK, TARGET_SIZE, LOWER_BLUE, UPPER_BLUE
+
+    with open(args.config, 'r', encoding='utf-8') as f:
+        cfg = yaml.safe_load(f)
+
+    RGB_IMAGES = cfg['paths']['rgb']
+    NGR_DIR = cfg['paths']['nrg']
+    MASKS = cfg['paths']['masks']
+    TARGET_SIZE = tuple(cfg['general']['TARGET_SIZE'])
+    
+    LOWER_PINK = np.array(cfg['thresholds']['LOWER_PINK'])
+    UPPER_PINK = np.array(cfg['thresholds']['UPPER_PINK'])
+    LOWER_BLUE = np.array(cfg['thresholds']['LOWER_BLUE'])
+    UPPER_BLUE = np.array(cfg['thresholds']['UPPER_BLUE'])
+
+    if args.hue_min is not None:
+        LOWER_PINK[0] = args.hue_min
+        print(f"[*] Override: Lower Hue set to {args.hue_min}")
+        
+    if args.hue_max is not None:
+        UPPER_PINK[0] = args.hue_max
+        print(f"[*] Override: Upper Hue set to {args.hue_max}")
 
 def paths():
 
@@ -358,8 +394,10 @@ def plot_hsv_tresh(nir_hsv_list):
 
 def main():
 
-    load_and_set_config("config.yaml")
+    args = parse_args()
 
+    load_and_set_config(args)
+    
     nrg, rgb, mask = paths()
 
     kegle_m = keggle_masks(mask)
