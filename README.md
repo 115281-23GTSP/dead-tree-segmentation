@@ -1,44 +1,47 @@
-Dead Tree Segmentation Pipeline 🌲🍂
+🌲 Dead Tree Segmentation Pipeline 🍂
 This project provides an automated pipeline for detecting and segmenting dead trees from aerial imagery using RGB and NRG data.
-
+The pipeline performs preprocessing, vegetation analysis, and segmentation based on configurable thresholds.
 🚀 Installation & Usage
-To get started, follow these steps to set up your environment and run the pipeline:
-
 1. Clone the repository
-
-```Bash
 git clone https://github.com/YourUsername/dead-tree-segmentation.git
 cd dead-tree-segmentation
-```
 2. Install dependencies
-
-It is recommended to use a virtual environment. Install all required libraries using:
-
-```Bash
+It is strongly recommended to use a virtual environment.
 pip install -r requirements.txt
-```
-
-3. Run the pipeline
-
-Make sure your data is placed in the test data folder, then execute the main script:
-
-```Bash
+3. Prepare the data
+Place your input data in the following structure (default):
+test data/
+├── RGB_images/
+├── NRG_images/
+└── masks/
+File paths can be modified in config.yaml.
+4. Run the pipeline
 python main.py
-```
-
-4. Optional: Override thresholds
-
-You can manually adjust the Hue thresholds via command line arguments:
-
-```Bash
-python main.py -h_min 0.72 -h_max 0.92
-```
-
+5. Optional: Override segmentation thresholds
+You can manually adjust Hue thresholds via command-line arguments:
+python main.py --h_min 0.72 --h_max 0.92
 ⚙️ Configuration
-The config.yaml file allows you to manage paths and segmentation thresholds.
-
-YAML
+The config.yaml file allows you to manage input/output paths and segmentation parameters.
+Example:
 paths:
   rgb: "./test data/RGB_images/*.png"
   nrg: "./test data/NRG_images/*.png"
   masks: "./test data/masks/*.png"
+🔄 Running the Project Directly from Git
+If you want to run or update the project directly from GitHub, follow these steps:
+First-time setup
+git clone https://github.com/YourUsername/dead-tree-segmentation.git
+cd dead-tree-segmentation
+pip install -r requirements.txt
+python main.py
+Updating the project
+When new changes are available in the repository:
+git pull origin main
+Then rerun:
+python main.py
+🛠 Requirements
+Python 3.8+
+Dependencies listed in requirements.txt
+📌 Notes
+Ensure RGB and NRG images are correctly aligned.
+Threshold values may require tuning depending on lighting conditions and vegetation type.
