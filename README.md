@@ -8,7 +8,8 @@ To get started, follow these steps to set up your environment and run the pipeli
 
 ```Bash
 git clone https://github.com/YourUsername/dead-tree-segmentation.git
-cd dead-tree-segmentation```
+cd dead-tree-segmentation
+```
 2. Install dependencies
 
 It is recommended to use a virtual environment. Install all required libraries using:
