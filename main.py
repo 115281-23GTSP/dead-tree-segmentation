@@ -12,26 +12,23 @@ import os
 from scipy.ndimage import binary_fill_holes
 from skimage.morphology import binary_dilation, disk
 import yaml
-from config import NGR_DIR, RGB_IMAGES, MASKS, LOWER_PINK, UPPER_PINK, TARGET_SIZE, LOWER_BLUE, UPPER_BLUE
 import argparse
 
-def config(path="config.yaml"):
-
-    with open(path 'r' , encoding='utf-8') as f:
+def load_config(path="config.yaml"):
+    with open(path, "r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
 
-        RGB_IMAGES = cfg['paths']['rgb']
-        NGR_DIR = cfg['paths']['nrg']
-        MASKS = cfg['paths']['masks']
-
-        LOWER_PINK = np.array(cfg['thresholds']['LOWER_PINK'])
-        UPPER_PINK = np.array(cfg['thresholds']['UPPER_PINK'])
-        LOWER_BLUE = np.array(cfg['thresholds']['LOWER_BLUE'])
-        UPPER_BLUE = np.array(cfg['thresholds']['UPPER_BLUE'])
-
-        TARGET_SIZE = tuple(cfg['general']['TARGET_SIZE'])
-
-    return cfg
+    config = {
+        "rgb_path": cfg["paths"]["rgb"].replace("/*.png", ""),
+        "nrg_path": cfg["paths"]["nrg"].replace("/*.png", ""),
+        "mask_path": cfg["paths"]["masks"].replace("/*.png", ""),
+        "h_min": float(cfg["thresholds"]["LOWER_PINK"][0]),
+        "h_max": float(cfg["thresholds"]["UPPER_PINK"][0]),
+        "size": tuple(cfg["general"]["TARGET_SIZE"]),
+        "blue_min": np.array(cfg['thresholds']['LOWER_BLUE']),
+        "blue_max": np.array(cfg['thresholds']['UPPER_BLUE'])
+    }
+    return config
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Dead Tree Segmentation Pipeline")
@@ -43,68 +40,43 @@ def parse_args():
     
     return parser.parse_args()
 
-def load_and_set_config(args):
+def paths(cfg):
 
-    global NGR_DIR, RGB_IMAGES, MASKS, LOWER_PINK, UPPER_PINK, TARGET_SIZE, LOWER_BLUE, UPPER_BLUE
-
-    with open(args.config, 'r', encoding='utf-8') as f:
-        cfg = yaml.safe_load(f)
-
-    RGB_IMAGES = cfg['paths']['rgb']
-    NGR_DIR = cfg['paths']['nrg']
-    MASKS = cfg['paths']['masks']
-    TARGET_SIZE = tuple(cfg['general']['TARGET_SIZE'])
-    
-    LOWER_PINK = np.array(cfg['thresholds']['LOWER_PINK'])
-    UPPER_PINK = np.array(cfg['thresholds']['UPPER_PINK'])
-    LOWER_BLUE = np.array(cfg['thresholds']['LOWER_BLUE'])
-    UPPER_BLUE = np.array(cfg['thresholds']['UPPER_BLUE'])
-
-    if args.hue_min is not None:
-        LOWER_PINK[0] = args.hue_min
-        print(f"[*] Override: Lower Hue set to {args.hue_min}")
-        
-    if args.hue_max is not None:
-        UPPER_PINK[0] = args.hue_max
-        print(f"[*] Override: Upper Hue set to {args.hue_max}")
-
-def paths():
-
-    nrg_list = sorted(os.listdir(NGR_DIR))
-    rgb_list = sorted(os.listdir(RGB_IMAGES))
-    masks_list = sorted(os.listdir(MASKS))
+    nrg_list = sorted(os.listdir((cfg['nrg_path'])))
+    rgb_list = sorted(os.listdir((cfg['rgb_path'])))
+    masks_list = sorted(os.listdir((cfg['mask_path'])))
 
     return nrg_list, rgb_list, masks_list
 
-def keggle_masks(masks_list):
+def keggle_masks(masks_list, cfg):
     list_kegle_mask = []
 
     for i in masks_list:
 
-        kegle_mask_array = np.array(Image.open(os.path.join(MASKS, i)))
+        kegle_mask_array = np.array(Image.open(os.path.join(cfg['mask_path'], i)))
         
-        kegle_mask_resized = ski.transform.resize(kegle_mask_array, TARGET_SIZE, order=0)
+        kegle_mask_resized = ski.transform.resize(kegle_mask_array, cfg['size'], order=0)
 
         kegle_masks_uint8 = (kegle_mask_resized.astype(np.uint8)) * 255
         list_kegle_mask.append(kegle_masks_uint8)
 
     return list_kegle_mask
 
-def rgb_masks(rgb_list):
+def rgb_masks(rgb_list, cfg):
 
     list_rgb_masks = []
     rgb_images_list = []
      
     for i in rgb_list:
 
-        rgb_array = np.array(Image.open(os.path.join(RGB_IMAGES, i)))
+        rgb_array = np.array(Image.open(os.path.join(cfg["rgb_path"], i)))
 
         rgb_images_list.append(rgb_array)
         
         rgb_to_hsv = ski.color.rgb2hsv(rgb_array)
-        rgb_treshold = np.all((rgb_to_hsv >= LOWER_PINK) & (rgb_to_hsv <= UPPER_PINK), axis = -1)
+        rgb_treshold = (rgb_to_hsv[:,:,0] >= cfg["h_min"]) & (rgb_to_hsv[:,:,0] <= cfg["h_max"])
 
-        rgb_resized_bool = ski.transform.resize(rgb_treshold, TARGET_SIZE, order=0, preserve_range=True)
+        rgb_resized_bool = ski.transform.resize(rgb_treshold, cfg["size"], order=0, preserve_range=True)
 
         rgb_filling = binary_fill_holes(rgb_resized_bool)
 
@@ -115,18 +87,18 @@ def rgb_masks(rgb_list):
 
     return list_rgb_masks, rgb_images_list
 
-def nrg_masks(nrg_list):
+def nrg_masks(nrg_list, cfg):
 
     nir_masks_list = []
     nir_images_list = []
 
     for i in nrg_list:
 
-        nir_array = np.array(Image.open(os.path.join(NGR_DIR, i)))
+        nir_array = np.array(Image.open(os.path.join(cfg['nrg_path'], i)))
 
         nir_images_list.append(nir_array)
 
-        nir_resize = ski.transform.resize(nir_array, TARGET_SIZE, order=0, preserve_range=True).astype(float)
+        nir_resize = ski.transform.resize(nir_array, cfg['size'], order=0, preserve_range=True).astype(float)
 
         nir = nir_resize[:, :, 0]
         red = nir_resize[:, :, 1]
@@ -143,22 +115,22 @@ def nrg_masks(nrg_list):
 
     return nir_masks_list, nir_images_list
 
-def nrg_treshold_method(nrg_list):
+def nrg_treshold_method(nrg_list, cfg):
 
     nir_treshold_list = []
 
     nir_hsv_list = []
     
-    for i in  nrg_list:
+    for i in nrg_list:
     
-        nir_array = np.array(Image.open(os.path.join(NGR_DIR, i)))
+        nir_array = np.array(Image.open(os.path.join(cfg['nrg_path'], i)))
 
-        nir_resize = ski.transform.resize(nir_array, TARGET_SIZE, order=0, preserve_range=True).astype(float)
+        nir_resize = ski.transform.resize(nir_array, cfg['size'], order=0, preserve_range=True).astype(float)
 
         nir_hsv = rgb2hsv(nir_resize)
         nir_hsv_list.append(nir_hsv)
 
-        nir_treshold = np.all((nir_hsv >= LOWER_BLUE) & (nir_hsv <= UPPER_BLUE), axis=-1)
+        nir_treshold = np.all((nir_hsv >= cfg['blue_min']) & (nir_hsv <= cfg['blue_max']), axis=-1)
 
         nir_filling = binary_fill_holes(nir_treshold)
 
@@ -303,7 +275,7 @@ def IOU_bar_chart(avrage_IoU, list_for_IoU):
 
     return None
 
-def tresh_IOU_bar_chart(avrage_IoU_tresh, tresh_method_IoU_list): ###############
+def tresh_IOU_bar_chart(avrage_IoU_tresh, tresh_method_IoU_list):
 
     evaluated_nir_IoU_values = []
 
@@ -393,20 +365,21 @@ def plot_hsv_tresh(nir_hsv_list):
 
 
 def main():
-
+    
     args = parse_args()
 
-    load_and_set_config(args)
+    config = load_config(args.config)
+
+    if args.hue_min is not None:
+        config["h_min"] = args.hue_min
+    if args.hue_max is not None:
+        config["h_max"] = args.hue_max
     
-    nrg, rgb, mask = paths()
-
-    kegle_m = keggle_masks(mask)
-
-    rgb_m, rgb_images_list = rgb_masks(rgb)
-
-    nrg_m, nrg_images_list = nrg_masks(nrg)
-
-    nrg_tresh, nir_hsv_l = nrg_treshold_method(nrg)
+    nrg, rgb, mask = paths(config)
+    kegle_m = keggle_masks(mask, config)
+    rgb_m, rgb_images_list = rgb_masks(rgb, config)
+    nrg_m, nrg_images_list = nrg_masks(nrg, config)
+    nrg_tresh, nir_hsv_l = nrg_treshold_method(nrg, config)
 
     combined_m, combined_t = combined_masks(rgb_m, nrg_m, nrg_tresh)
 
@@ -416,7 +389,7 @@ def main():
 
     cm_fun = function_confusion_matrix(combined_m, kegle_m)
 
-    acc, err, prec, rec_sc, f1_sc =  confusion_matrix_metrics(cm_fun)
+    acc, err, prec, rec_sc, f1_sc = confusion_matrix_metrics(cm_fun)
 
     IOU_bar_chart(IoU_avr, IoU_l)
 
