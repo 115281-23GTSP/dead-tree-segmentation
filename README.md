@@ -98,3 +98,8 @@ Dependencies listed in requirements.txt
 📌 Notes
 Ensure RGB and NRG images are correctly aligned.
 Threshold values may require tuning depending on lighting conditions and vegetation type.
+
+Visual Explanation:
+<img width="1434" height="405" alt="Zrzut ekranu 2026-01-12 o 22 34 59" src="https://github.com/user-attachments/assets/02ab007e-2de2-44fa-a339-fb4c4f0ab881" />
+
+
