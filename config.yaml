@@ -1,14 +1,16 @@
 paths:
-  rgb: ./data/RGB_images/*.png #<PATHTODATA>
-  nrg: ./data/NRG_images/*.png #<PATHTODATA>
-  masks: ./data/masks/*.png #<PATHTODATA>
+  rgb: "./data/RGB_images/*.png"
+  nrg: "./data/NRG_images/*.png"
+  masks: "./data/masks/*.png"
 
 thresholds:
-  LOWER_PINK = np.array([0.70, 0.10, 0.50])
-  UPPER_PINK = np.array([0.95, 0.70, 1.00])
 
-  LOWER_BLUE= np.array([0.45, 0.20, 0.6])
-  UPPER_BLUE = np.array([0.55, 0.8, 1])
+  LOWER_PINK: [0.70, 0.10, 0.50]
+  UPPER_PINK: [0.95, 0.70, 1.00]
+
+  LOWER_BLUE: [0.45, 0.20, 0.6]
+  UPPER_BLUE: [0.55, 0.8, 1.0]
 
 general:
-  TARGET_SIZE = (256, 256)
+
+  TARGET_SIZE: [256, 256]
