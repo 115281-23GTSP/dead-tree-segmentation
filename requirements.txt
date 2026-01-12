@@ -11,4 +11,5 @@ from skimage.exposure import rescale_intensity
 import os
 from scipy.ndimage import binary_fill_holes
 from skimage.morphology import binary_dilation, disk
-from config import NGR_DIR, RGB_IMAGES, MASKS, LOWER_PINK, UPPER_PINK, TARGET_SIZE, LOWER_BLUE, UPPER_BLUE
+import yaml
+import argparse
