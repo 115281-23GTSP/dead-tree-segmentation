@@ -1,12 +1,8 @@
-💻 Requirements
-The project requires Python 3.8+ and the libraries listed in requirements.txt:
+## 🚀 Installation & Usage
 
-numpy, matplotlib, seaborn
+To get started, follow these steps to set up your environment and run the pipeline:
 
-scikit-image, Pillow, scipy
-
-scikit-learn, PyYAML
-
-🚀 Installation & Usage
-Clone the repository:
-
+### 1. Clone the repository
+```bash
+git clone [https://github.com/YourUsername/dead-tree-segmentation.git](https://github.com/YourUsername/dead-tree-segmentation.git)
+cd dead-tree-segmentation
