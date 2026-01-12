@@ -358,6 +358,8 @@ def plot_hsv_tresh(nir_hsv_list):
 
 def main():
 
+    load_and_set_config("config.yaml")
+
     nrg, rgb, mask = paths()
 
     kegle_m = keggle_masks(mask)
