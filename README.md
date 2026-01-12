@@ -14,8 +14,10 @@ cd dead-tree-segmentation
 
 It is recommended to use a virtual environment. Install all required libraries using:
 
-Bash
+```Bash
 pip install -r requirements.txt
+```
+
 3. Run the pipeline
 
 Make sure your data is placed in the test data folder, then execute the main script:
