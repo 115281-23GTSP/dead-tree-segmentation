@@ -11,12 +11,26 @@ from skimage.exposure import rescale_intensity
 import os
 from scipy.ndimage import binary_fill_holes
 from skimage.morphology import binary_dilation, disk
+import yaml
 from config import NGR_DIR, RGB_IMAGES, MASKS, LOWER_PINK, UPPER_PINK, TARGET_SIZE, LOWER_BLUE, UPPER_BLUE
 
 def config(path="config.yaml"):
 
     with open(path 'r' , encoding='utf-8') as f:
         cfg = yaml.safe_load(f)
+
+        RGB_IMAGES = cfg['paths']['rgb']
+        NGR_DIR = cfg['paths']['nrg']
+        MASKS = cfg['paths']['masks']
+
+        LOWER_PINK = np.array(cfg['thresholds']['LOWER_PINK'])
+        UPPER_PINK = np.array(cfg['thresholds']['UPPER_PINK'])
+        LOWER_BLUE = np.array(cfg['thresholds']['LOWER_BLUE'])
+        UPPER_BLUE = np.array(cfg['thresholds']['UPPER_BLUE'])
+
+        TARGET_SIZE = tuple(cfg['general']['TARGET_SIZE'])
+
+    return cfg
 
 def paths():
 
