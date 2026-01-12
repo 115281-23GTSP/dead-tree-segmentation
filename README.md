@@ -22,14 +22,18 @@ pip install -r requirements.txt
 
 Make sure your data is placed in the test data folder, then execute the main script:
 
-Bash
+```Bash
 python main.py
+```
+
 4. Optional: Override thresholds
 
 You can manually adjust the Hue thresholds via command line arguments:
 
-Bash
+```Bash
 python main.py -h_min 0.72 -h_max 0.92
+```
+
 ⚙️ Configuration
 The config.yaml file allows you to manage paths and segmentation thresholds.
 
