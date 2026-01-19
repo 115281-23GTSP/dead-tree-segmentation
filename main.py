@@ -18,7 +18,7 @@ import mylib
 
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(filename='example.log',
+logging.basicConfig(filename='data.log',
                     encoding = 'utf-8', level = logging.DEBUG)
 
 def load_config(path="config.yaml"):
