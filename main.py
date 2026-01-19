@@ -269,17 +269,17 @@ def combined_masks(list_rgb_masks, nir_masks_list, nir_treshold_list):
                combined_2.dtype
         )
 
-        logger.info('combined_filling_holes: %s, combined_filling_holes: %s'
+        logger.info('combined_filling_holes: %s, combined_filling_holes: %s',
                 combined_filling_holes.shape,
                 combined_filling_holes.dtype
         )
 
-      logger.info('combined_filling_holes_2: %s, combined_filling_holes_2: %s'
+      logger.info('combined_filling_holes_2: %s, combined_filling_holes_2: %s',
                 combined_filling_holes_2.shape,
                 combined_filling_holes_2.dtype
       )
 
-      logger.info('combined_dilation: %s, combined_dilation: %s'
+      logger.info('combined_dilation: %s, combined_dilation: %s',
                 combined_dilation.shape,
                 combined_dilation.dtype
       )
@@ -410,15 +410,14 @@ def confusion_matrix_metrics(confusion_matrix_list):
     recall_score = TP / (TP + FN + 1e-10)
     f1_score = 2 * (precision * recall_score) / (precision + recall_score + 1e-10)
 
-    logger.info('FP: %s, FP%s',
-            FP.shape
-            FP.dtype
+   logger.info('FP value: %s, typ: %s', 
+        FP, 
+        type(FP)
     )
 
-    logger.info('accuracy: %s, accuracy: %s',
-           accurucy.shape,
-           accurucy.dtype
-      
+   logger.info('accuracy value: %s, type: %s',
+        accurucy,
+        type(accurucy)
     )
 
     return accurucy, error, precision, recall_score, f1_score
