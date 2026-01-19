@@ -13,6 +13,13 @@ from scipy.ndimage import binary_fill_holes
 from skimage.morphology import binary_dilation, disk
 import yaml
 import argparse
+import logging
+import mylib
+
+logger = logging.getLogger(__name__)
+
+logging.basicConfig(filename='example.log',
+                    encoding = 'utf-8', level = logging.DEBUG)
 
 def load_config(path="config.yaml"):
     with open(path, "r", encoding="utf-8") as f:
@@ -46,6 +53,14 @@ def paths(cfg):
     rgb_list = sorted(os.listdir((cfg['rgb_path'])))
     masks_list = sorted(os.listdir((cfg['mask_path'])))
 
+    logger.warning('paths')
+    logger.info(
+        'paths nrg_list: %d, rgb_list: %d, mask_list; %d',
+        len(nrg_list),
+        len(rgb_list),
+        len(masks_list)
+    )
+
     return nrg_list, rgb_list, masks_list
 
 def keggle_masks(masks_list, cfg):
@@ -59,6 +74,26 @@ def keggle_masks(masks_list, cfg):
 
         kegle_masks_uint8 = (kegle_mask_resized.astype(np.uint8)) * 255
         list_kegle_mask.append(kegle_masks_uint8)
+
+        logger.warning('function kegle variables')
+        
+        logger.info('kegle_mask_array: %s',
+            kegle_mask_array.shape
+        )
+
+        logger.info('kegle_mask_array: %s',
+            kegle_mask_array.dtype
+        )
+
+        logger.info('kegle_mask_resized: %s, kegle_mask_resized: %s',
+            kegle_mask_array.shape,  
+            kegle_mask_array.dtype
+        )
+
+        logger.info('kegle_mask_resized: %s, kegle_mask_resized: %s',
+            kegle_mask_resized.dtype,
+            kegle_mask_resized.shape
+        )
 
     return list_kegle_mask
 
@@ -84,6 +119,32 @@ def rgb_masks(rgb_list, cfg):
         
         list_rgb_masks.append(rgb_uint8)
 
+        logger.warning('data type for rgb function RGB')
+
+        logger.info('rgb_to_hsv: %s, rgb_to_hsv: %s',
+            rgb_to_hsv.shape,
+            rgb_to_hsv.dtype
+        )
+
+        logger.info('rgb_treshold: %s, rgb_treshold: %s',
+            rgb_treshold.shape,
+            rgb_treshold.dtype
+        )
+
+        logger.info('rgb_resized_bool: %s, rgb_resized_bool: %s',
+            rgb_resized_bool.shape,
+            rgb_resized_bool.dtype
+        )
+
+        logger.info('rgb_filling: %s, rgb_filling: %s',
+            rgb_filling.shape,
+            rgb_filling.dtype
+        )
+
+        logger.info('rgb_uint8: %s, rgb_uint8: %s',
+            rgb_uint8.shape,
+            rgb_uint8.dtype
+        )
 
     return list_rgb_masks, rgb_images_list
 
@@ -113,6 +174,26 @@ def nrg_masks(nrg_list, cfg):
 
         nir_masks_list.append(mask_uint8)
 
+        logger.warning('function counting NDVI is detecting dead vegetation that is mean not only trees will be detected')
+
+        logger.info('nir: %s',
+            nir.shape
+        )
+
+        logger.info('red: %s',
+              red.shape         
+        )
+        
+        logger.info('nir_mask: %s, nir_mask: %s',
+              nir_mask.shape,
+              nir_mask.dtype
+        )
+
+        logger.info('nir_filling: %s, nir_filling: %s',
+              nir_filling.shape,
+              nir_filling.dtype
+        )
+
     return nir_masks_list, nir_images_list
 
 def nrg_treshold_method(nrg_list, cfg):
@@ -137,6 +218,18 @@ def nrg_treshold_method(nrg_list, cfg):
         rgb_uint8 = (nir_filling.astype(np.uint8)) * 255
         
         nir_treshold_list.append(rgb_uint8)
+
+        logger.warming('loggers for function nrg_treshold_method')
+
+        logger.info('nir_treshold: %s, nir_treshold: %s',
+              nir_treshold.shape,
+              nir_treshold.dtype
+        )
+
+        logger.info('nir_filling: %s, nir_filling: %s',
+              nir_filling.shape,
+              nir_filling.dtype
+        )
 
     return nir_treshold_list, nir_hsv_list
 
@@ -164,6 +257,20 @@ def combined_masks(list_rgb_masks, nir_masks_list, nir_treshold_list):
         list_combined_masks.append(combined_dilation)
         list_combined_masks_tresh.append(combined_dilation_2)
 
+        logger.warning('function to combined mask of NDVI method and rgb masks')
+
+        logger.info('combined: %s, combined: %s',
+               combined.shape
+        )
+        #logger.info(combined.shape, combined.dtype, combined_2.shape, combined_2.dtype, 'combined masks shape and dtype then combined_2 mask shape and dtype')
+        logger.info(combined_filling_holes.shape, combined_filling_holes.dtype,
+                    combined_filling_holes_2.shape, combined_filling_holes_2.dtype,
+                    'same as above but for combined_filling_holes, combined_filling_holes2')
+
+        logger.info(combined_dilation.shape, combined_dilation.dtype,
+                    combined_dilation_2.shape, combined_dilation_2.dtype,
+                   'combined_dilation shape, dtype then combined_dilation_2 shape and dtype')
+
     return list_combined_masks, list_combined_masks_tresh
 
 def IoU(list_combined_masks, list_kegle_mask):
@@ -179,6 +286,10 @@ def IoU(list_combined_masks, list_kegle_mask):
 
         intersection_count = np.count_nonzero(intersection)
         union_count = np.count_nonzero(union)
+
+        logger.warning('function IoU befor counting')
+        logger.info(intersection.dtype, union.dtype, 'data types for intersection and union')
+        logger.info(union_count.dtype, union_count.shape, 'dtype and shape for union_count')
 
         if union_count == 0:
             iou = 0
@@ -206,6 +317,9 @@ def tresh_IoU(list_kegle_mask, list_combined_masks_tresh):
         intersection_count = np.count_nonzero(intersection)
         union_count = np.count_nonzero(union)
 
+        logger.warning('IoU for treshold method')
+        logger.info(gt_bool.shape, gt_bool.dtype, 'shape, dtype for gt_bool'))
+
         if union_count == 0:
             iou = 0
         else:
@@ -231,6 +345,8 @@ def function_confusion_matrix(list_combined_masks, list_kegle_mask):
 
         cm = confusion_matrix(ground_truth, pred, labels = [0, 1])
         confusion_matrix_list.append(cm)
+
+        
     
     return confusion_matrix_list
 
