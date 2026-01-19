@@ -219,7 +219,7 @@ def nrg_treshold_method(nrg_list, cfg):
         
         nir_treshold_list.append(rgb_uint8)
 
-        logger.warming('loggers for function nrg_treshold_method')
+        logger.warning('loggers for function nrg_treshold_method')
 
         logger.info('nir_treshold: %s, nir_treshold: %s',
               nir_treshold.shape,
@@ -260,16 +260,34 @@ def combined_masks(list_rgb_masks, nir_masks_list, nir_treshold_list):
         logger.warning('function to combined mask of NDVI method and rgb masks')
 
         logger.info('combined: %s, combined: %s',
-               combined.shape
+               combined.shape,
+               combined.dtype
         )
-        #logger.info(combined.shape, combined.dtype, combined_2.shape, combined_2.dtype, 'combined masks shape and dtype then combined_2 mask shape and dtype')
-        logger.info(combined_filling_holes.shape, combined_filling_holes.dtype,
-                    combined_filling_holes_2.shape, combined_filling_holes_2.dtype,
-                    'same as above but for combined_filling_holes, combined_filling_holes2')
 
-        logger.info(combined_dilation.shape, combined_dilation.dtype,
-                    combined_dilation_2.shape, combined_dilation_2.dtype,
-                   'combined_dilation shape, dtype then combined_dilation_2 shape and dtype')
+        logger.info('combined_2: %s, combined_2: %s',
+               combined_2.shape,
+               combined_2.dtype
+        )
+
+        logger.info('combined_filling_holes: %s, combined_filling_holes: %s'
+                combined_filling_holes.shape,
+                combined_filling_holes.dtype
+        )
+
+      logger.info('combined_filling_holes_2: %s, combined_filling_holes_2: %s'
+                combined_filling_holes_2.shape,
+                combined_filling_holes_2.dtype
+      )
+
+      logger.info('combined_dilation: %s, combined_dilation: %s'
+                combined_dilation.shape,
+                combined_dilation.dtype
+      )
+
+      logger.info('combined_dilation_2: %s, combined_dilation_2: %s',
+                combined_dilation_2.shape,
+                combined_dilation_2.dtype
+      )
 
     return list_combined_masks, list_combined_masks_tresh
 
@@ -288,8 +306,21 @@ def IoU(list_combined_masks, list_kegle_mask):
         union_count = np.count_nonzero(union)
 
         logger.warning('function IoU befor counting')
-        logger.info(intersection.dtype, union.dtype, 'data types for intersection and union')
-        logger.info(union_count.dtype, union_count.shape, 'dtype and shape for union_count')
+
+        logger.info('intersection: %s, intersection: %s',
+                intersection.shape,
+                intersection.dtype
+        )
+
+        logger.info('union: %s, union: %s',
+                union.shape,
+                union.dtype
+        )
+
+        logger.info('union_count: %s, union_count: %s',
+                union_count.dtype,
+                union_count.shape
+        )
 
         if union_count == 0:
             iou = 0
@@ -318,7 +349,11 @@ def tresh_IoU(list_kegle_mask, list_combined_masks_tresh):
         union_count = np.count_nonzero(union)
 
         logger.warning('IoU for treshold method')
-        logger.info(gt_bool.shape, gt_bool.dtype, 'shape, dtype for gt_bool'))
+
+        logger.info('gt_bool: %s, gt_bool: %s',
+                gt_bool.shape,
+                gt_bool.dtype
+        )
 
         if union_count == 0:
             iou = 0
@@ -346,6 +381,16 @@ def function_confusion_matrix(list_combined_masks, list_kegle_mask):
         cm = confusion_matrix(ground_truth, pred, labels = [0, 1])
         confusion_matrix_list.append(cm)
 
+        logger.info('pred: %s, pred: %s',
+                pred.shape,
+                pred.dtype
+        ) #tak samo będzie dla kolejnej operacji flatten
+
+        logger.info('cm: %s, cm: %s',
+                cm.shape,
+                cm.dtype
+        )
+
         
     
     return confusion_matrix_list
@@ -364,6 +409,17 @@ def confusion_matrix_metrics(confusion_matrix_list):
     precision = TP / (TP + FP + 1e-10)
     recall_score = TP / (TP + FN + 1e-10)
     f1_score = 2 * (precision * recall_score) / (precision + recall_score + 1e-10)
+
+    logger.info('FP: %s, FP%s',
+            FP.shape
+            FP.dtype
+    )
+
+    logger.info('accuracy: %s, accuracy: %s',
+           accurucy.shape,
+           accurucy.dtype
+      
+    )
 
     return accurucy, error, precision, recall_score, f1_score
 
