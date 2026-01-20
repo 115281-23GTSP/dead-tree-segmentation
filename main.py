@@ -257,9 +257,9 @@ def combined_masks(list_rgb_masks, nir_masks_list, nir_treshold_list):
         list_combined_masks.append(combined_dilation)
         list_combined_masks_tresh.append(combined_dilation_2)
 
-        logger.warning('function to combined mask of NDVI method and rgb masks')
+      logger.warning('function to combined mask of NDVI method and rgb masks')
 
-        logger.info('combined: %s, combined: %s',
+      logger.info('combined: %s, combined: %s',
                combined.shape,
                combined.dtype
         )
