@@ -257,37 +257,37 @@ def combined_masks(list_rgb_masks, nir_masks_list, nir_treshold_list):
         list_combined_masks.append(combined_dilation)
         list_combined_masks_tresh.append(combined_dilation_2)
 
-      logger.warning('function to combined mask of NDVI method and rgb masks')
+        logger.warning('function to combined mask of NDVI method and rgb masks')
 
-      logger.info('combined: %s, combined: %s',
+        logger.info('combined: %s, combined: %s',
                combined.shape,
                combined.dtype
-      )
+        )
 
-      logger.info('combined_2: %s, combined_2: %s',
+        logger.info('combined_2: %s, combined_2: %s',
                combined_2.shape,
                combined_2.dtype
-      )
+        )
 
-      logger.info('combined_filling_holes: %s, combined_filling_holes: %s',
+        logger.info('combined_filling_holes: %s, combined_filling_holes: %s',
                 combined_filling_holes.shape,
                 combined_filling_holes.dtype
-      )
+        )
 
-      logger.info('combined_filling_holes_2: %s, combined_filling_holes_2: %s',
+        logger.info('combined_filling_holes_2: %s, combined_filling_holes_2: %s',
                 combined_filling_holes_2.shape,
                 combined_filling_holes_2.dtype
-      )
+        )
 
-      logger.info('combined_dilation: %s, combined_dilation: %s',
+        logger.info('combined_dilation: %s, combined_dilation: %s',
                 combined_dilation.shape,
                 combined_dilation.dtype
-      )
+        )
 
-      logger.info('combined_dilation_2: %s, combined_dilation_2: %s',
+        logger.info('combined_dilation_2: %s, combined_dilation_2: %s',
                 combined_dilation_2.shape,
                 combined_dilation_2.dtype
-      )
+        )
 
     return list_combined_masks, list_combined_masks_tresh
 
@@ -410,12 +410,12 @@ def confusion_matrix_metrics(confusion_matrix_list):
     recall_score = TP / (TP + FN + 1e-10)
     f1_score = 2 * (precision * recall_score) / (precision + recall_score + 1e-10)
 
-   logger.info('FP value: %s, typ: %s', 
+    logger.info('FP value: %s, typ: %s', 
         FP, 
         type(FP)
     )
 
-   logger.info('accuracy value: %s, type: %s',
+    logger.info('accuracy value: %s, type: %s',
         accurucy,
         type(accurucy)
     )
