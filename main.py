@@ -19,7 +19,7 @@ import mylib
 logger = logging.getLogger(__name__)
 
 logging.basicConfig(filename='data.log',
-                    encoding = 'utf-8', level = logging.DEBUG)
+                    encoding = 'utf-8', level = logging.DEBUG, filemode='w')
 
 def load_config(path="config.yaml"):
     with open(path, "r", encoding="utf-8") as f:
@@ -264,12 +264,12 @@ def combined_masks(list_rgb_masks, nir_masks_list, nir_treshold_list):
                combined.dtype
         )
 
-        logger.info('combined_2: %s, combined_2: %s',
+      logger.info('combined_2: %s, combined_2: %s',
                combined_2.shape,
                combined_2.dtype
         )
 
-        logger.info('combined_filling_holes: %s, combined_filling_holes: %s',
+      logger.info('combined_filling_holes: %s, combined_filling_holes: %s',
                 combined_filling_holes.shape,
                 combined_filling_holes.dtype
         )
