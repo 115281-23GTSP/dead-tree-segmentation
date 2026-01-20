@@ -14,7 +14,6 @@ from skimage.morphology import binary_dilation, disk
 import yaml
 import argparse
 import logging
-import mylib
 
 logger = logging.getLogger(__name__)
 
