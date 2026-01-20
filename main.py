@@ -262,17 +262,17 @@ def combined_masks(list_rgb_masks, nir_masks_list, nir_treshold_list):
       logger.info('combined: %s, combined: %s',
                combined.shape,
                combined.dtype
-        )
+      )
 
       logger.info('combined_2: %s, combined_2: %s',
                combined_2.shape,
                combined_2.dtype
-        )
+      )
 
       logger.info('combined_filling_holes: %s, combined_filling_holes: %s',
                 combined_filling_holes.shape,
                 combined_filling_holes.dtype
-        )
+      )
 
       logger.info('combined_filling_holes_2: %s, combined_filling_holes_2: %s',
                 combined_filling_holes_2.shape,
