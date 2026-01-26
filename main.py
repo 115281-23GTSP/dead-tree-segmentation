@@ -425,6 +425,8 @@ def confusion_matrix_metrics(confusion_matrix_list):
 
 def IOU_bar_chart(avrage_IoU, list_for_IoU):
 
+    os.makedir(output_folder, exist_ok = True)
+
     evaluated_IoU_values = []
 
     for i in list_for_IoU:
@@ -441,11 +443,16 @@ def IOU_bar_chart(avrage_IoU, list_for_IoU):
     plt.ylim(0, 100)
     plt.axhline(avrage_IoU, label=f'Mean: {avrage_IoU:.2f}%')
     plt.legend()
-    plt.show()
+
+    path.os.join(output_folder, 'IoU_base_chart.jpg')
+    plt.savefig(path)
+    plt.close()
 
     return None
 
 def tresh_IOU_bar_chart(avrage_IoU_tresh, tresh_method_IoU_list):
+
+    os.makedir(output_folder, exist_ok = True)
 
     evaluated_nir_IoU_values = []
 
@@ -463,11 +470,16 @@ def tresh_IOU_bar_chart(avrage_IoU_tresh, tresh_method_IoU_list):
     plt.ylim(0, 100)
     plt.axhline(avrage_IoU_tresh, label=f'Mean: {avrage_IoU_tresh:.2f}%')
     plt.legend()
-    plt.show()
+
+    path.os.join(output_folder, 'treshold_bar_IoU.jpg')
+    plt.savefig(path)
+    plt.close()
 
     return None
 
 def confusion_matrix_heat_map(confusion_matrix_list):
+
+    os.makedir(output_folder, exist_ok = True)
 
     sum_confusion_matrix = np.sum(confusion_matrix_list, axis = 0)
 
@@ -478,7 +490,9 @@ def confusion_matrix_heat_map(confusion_matrix_list):
         square=False, xticklabels='auto', yticklabels='auto',
         mask=None, ax=None)
     
-    plt.show()
+    path = os.path.join(output_folder, 'confusion_matrix_heatmap.jpg')
+    plt.savefig(path)
+    plt.close()
     
     return None
     
@@ -487,6 +501,8 @@ def plot_confusion_metrics(accurucy, error, precision, recall_score, f1_score):
     x = ['Accuracy', 'Error', 'Precision', 'Recall', 'F1']
     y = [accurucy, error, precision, recall_score, f1_score]
 
+    os.makedir(output_folder, exist_ok = True)
+
     plt.figure(figsize=(15, 8))
 
     plt.bar(x, y)
@@ -494,11 +510,16 @@ def plot_confusion_metrics(accurucy, error, precision, recall_score, f1_score):
     plt.ylabel('Metric value')
     plt.grid(axis='y')
     plt.tight_layout()
-    plt.show()
+
+    path = os.path.join(output_folder, 'confusion_matrix_metrics.jpg')
+    plt.savefig(path)
+    plt.close()
 
     return None
 
 def ploting_images(list_rgb_masks, nir_masks_list, list_combined_masks, list_kegle_mask, rgb_images_list, nrg_images_list):
+
+    os.makedir(output_folder, exist_ok = True)
 
     fig, axes = plt.subplots(1, 6, figsize=(16, 4))
 
@@ -524,12 +545,20 @@ def ploting_images(list_rgb_masks, nir_masks_list, list_combined_masks, list_keg
         ax.axis('off')
 
     plt.tight_layout()
-    plt.show()
+
+    path = os.path.join(output_folder, 'compare.jpg')
+    plt.savefig(path)
+    plt.close()
 
 def plot_hsv_tresh(nir_hsv_list):
+
+    os.makedirs(output_folder, exist_ok=True)
     
     plt.imshow(nir_hsv_list[0])
-    plt.show()
+
+    path = os.path.join(output_folder, 'nir_hsv.jpg')
+    plt.savefig(path)
+    plt.close()
 
     return None
 
