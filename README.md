@@ -108,4 +108,24 @@ Visual Explanation:
 <img width="785" height="472" alt="image" src="https://github.com/user-attachments/assets/a00df9c7-9c43-4656-874d-f11e5fb3a546" />
 
 
+hot to make venv
 
+```bash
+go to your folder
+```
+
+then
+
+```bash
+python3 -m venv .venv
+```
+
+```bash
+source venv/bin/activate
+```
+
+and athe end of the venv add requirements.txt
+
+```bash
+pip install -r requirements.txt
+```
