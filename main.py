@@ -423,9 +423,9 @@ def confusion_matrix_metrics(confusion_matrix_list):
 
 #ploting
 
-def IOU_bar_chart(avrage_IoU, list_for_IoU):
+def IOU_bar_chart(avrage_IoU, list_for_IoU, output_folder):
 
-    os.makedir(output_folder, exist_ok = True)
+    os.makedirs(output_folder, exist_ok = True)
 
     evaluated_IoU_values = []
 
@@ -444,15 +444,15 @@ def IOU_bar_chart(avrage_IoU, list_for_IoU):
     plt.axhline(avrage_IoU, label=f'Mean: {avrage_IoU:.2f}%')
     plt.legend()
 
-    path.os.join(output_folder, 'IoU_base_chart.jpg')
+    path = os.path.join(output_folder, 'IoU_base_chart.jpg')
     plt.savefig(path)
     plt.close()
 
     return None
 
-def tresh_IOU_bar_chart(avrage_IoU_tresh, tresh_method_IoU_list):
+def tresh_IOU_bar_chart(avrage_IoU_tresh, tresh_method_IoU_list, output_folder):
 
-    os.makedir(output_folder, exist_ok = True)
+    os.makedirs(output_folder, exist_ok = True)
 
     evaluated_nir_IoU_values = []
 
@@ -471,15 +471,15 @@ def tresh_IOU_bar_chart(avrage_IoU_tresh, tresh_method_IoU_list):
     plt.axhline(avrage_IoU_tresh, label=f'Mean: {avrage_IoU_tresh:.2f}%')
     plt.legend()
 
-    path.os.join(output_folder, 'treshold_bar_IoU.jpg')
+    path = os.path.join(output_folder, 'treshold_bar_IoU.jpg')
     plt.savefig(path)
     plt.close()
 
     return None
 
-def confusion_matrix_heat_map(confusion_matrix_list):
+def confusion_matrix_heat_map(confusion_matrix_list, output_folder):
 
-    os.makedir(output_folder, exist_ok = True)
+    os.makedirs(output_folder, exist_ok = True)
 
     sum_confusion_matrix = np.sum(confusion_matrix_list, axis = 0)
 
@@ -496,12 +496,12 @@ def confusion_matrix_heat_map(confusion_matrix_list):
     
     return None
     
-def plot_confusion_metrics(accurucy, error, precision, recall_score, f1_score):
+def plot_confusion_metrics(accurucy, error, precision, recall_score, f1_score, output_folder):
 
     x = ['Accuracy', 'Error', 'Precision', 'Recall', 'F1']
     y = [accurucy, error, precision, recall_score, f1_score]
 
-    os.makedir(output_folder, exist_ok = True)
+    os.makedirs(output_folder, exist_ok = True)
 
     plt.figure(figsize=(15, 8))
 
@@ -517,9 +517,9 @@ def plot_confusion_metrics(accurucy, error, precision, recall_score, f1_score):
 
     return None
 
-def ploting_images(list_rgb_masks, nir_masks_list, list_combined_masks, list_kegle_mask, rgb_images_list, nrg_images_list):
+def ploting_images(list_rgb_masks, nir_masks_list, list_combined_masks, list_kegle_mask, rgb_images_list, nrg_images_list, output_folder):
 
-    os.makedir(output_folder, exist_ok = True)
+    os.makedirs(output_folder, exist_ok = True)
 
     fig, axes = plt.subplots(1, 6, figsize=(16, 4))
 
@@ -550,7 +550,7 @@ def ploting_images(list_rgb_masks, nir_masks_list, list_combined_masks, list_keg
     plt.savefig(path)
     plt.close()
 
-def plot_hsv_tresh(nir_hsv_list):
+def plot_hsv_tresh(nir_hsv_list, output_folder):
 
     os.makedirs(output_folder, exist_ok=True)
     
@@ -564,6 +564,8 @@ def plot_hsv_tresh(nir_hsv_list):
 
 
 def main():
+
+    output_folder = "wyniki"
     
     args = parse_args()
 
@@ -590,17 +592,17 @@ def main():
 
     acc, err, prec, rec_sc, f1_sc = confusion_matrix_metrics(cm_fun)
 
-    IOU_bar_chart(IoU_avr, IoU_l)
+    IOU_bar_chart(IoU_avr, IoU_l, output_folder)
 
-    tresh_IOU_bar_chart(avrage_IoU_t, tresh_method_IoU_l)
+    tresh_IOU_bar_chart(avrage_IoU_t, tresh_method_IoU_l, output_folder)
 
-    confusion_matrix_heat_map(cm_fun)
+    confusion_matrix_heat_map(cm_fun, output_folder)
 
-    plot_confusion_metrics(acc, err, prec, rec_sc, f1_sc)
+    plot_confusion_metrics(acc, err, prec, rec_sc, f1_sc, output_folder)
 
-    ploting_images(rgb_m, nrg_m, combined_m, kegle_m, rgb_images_list, nrg_images_list)
+    ploting_images(rgb_m, nrg_m, combined_m, kegle_m, rgb_images_list, nrg_images_list, output_folder)
 
-    plot_hsv_tresh(nir_hsv_l)
+    plot_hsv_tresh(nir_hsv_l, output_folder)
 
 if __name__ == '__main__':
     main()
